@@ -1,0 +1,33 @@
+{
+  "name": "open-review",
+  "version": "1.0.0",
+  "description": "A chess reviewer of Chess.com for free",
+  "main": "src/index.js",
+  "type": "module",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node src/index.js",
+    "dev": "nodemon src/index.js",
+    "start:cron": "node src/cron.js"
+  },
+  "author": "Tushar",
+  "license": "ISC",
+  "dependencies": {
+    "@google/genai": "^1.11.0",
+    "axios": "^1.10.0",
+    "chess.js": "^1.4.0",
+    "cookie-parser": "^1.4.7",
+    "cors": "^2.8.5",
+    "dotenv": "^17.2.0",
+    "express": "^5.1.0",
+    "jsonwebtoken": "^9.0.2",
+    "mongoose": "^8.16.4",
+    "node-cron": "^4.2.1",
+    "rate-limiter-flexible": "^7.1.1",
+    "stockfish": "^16.0.0"
+  },
+  "devDependencies": {
+    "@types/cors": "^2.8.19",
+    "nodemon": "^3.1.10"
+  }
+}
