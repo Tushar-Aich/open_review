@@ -3,6 +3,7 @@ import {APIresponse} from '../utils/APIresponse.js'
 import {ApiError} from '../utils/APIerror.js'
 import {User} from '../models/user.model.js'
 import {fetchChessDotComUser} from '../utils/fetchChess.js'
+import { updateAllUserStats } from '../utils/chessUpdater.js';
 
 const generateAccessandRefreshTokens = async(userId) => {
     try {
@@ -80,10 +81,13 @@ const getStats = asyncHandler(async(req, res) => {
     console.error("User not found")
     return res.status(404).json(new ApiError(404, "User not found"))
   }
+  await updateAllUserStats();
+
+  const updatedUser = await User.findById(userId)
   const stats = {
-    rapid: user.stats?.rapid,
-    blitz: user.stats?.blitz,
-    bullet: user.stats?.bullet
+    rapid: updatedUser.stats?.rapid,
+    blitz: updatedUser.stats?.blitz,
+    bullet: updatedUser.stats?.bullet
   }
   return res.status(200).json(new APIresponse(200, stats, "Stats fetched successfully\nNOTE: Data updates every 20 minutes"));
 })
