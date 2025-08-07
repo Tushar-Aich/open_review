@@ -81,7 +81,7 @@ const getStats = asyncHandler(async(req, res) => {
     console.error("User not found")
     return res.status(404).json(new ApiError(404, "User not found"))
   }
-  await updateAllUserStats();
+  await updateAllUserStats(user.username);
 
   const updatedUser = await User.findById(userId)
   const stats = {
@@ -89,7 +89,7 @@ const getStats = asyncHandler(async(req, res) => {
     blitz: updatedUser.stats?.blitz,
     bullet: updatedUser.stats?.bullet
   }
-  return res.status(200).json(new APIresponse(200, stats, "Stats fetched successfully\nNOTE: Data updates every 20 minutes"));
+  return res.status(200).json(new APIresponse(200, stats, "Stats fetched successfully"));
 })
 
 export {

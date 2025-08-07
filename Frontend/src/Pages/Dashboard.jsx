@@ -237,9 +237,6 @@ const Dashboard = () => {
                 </div>
 
                 {/* Stats */}
-                <p className="text-center text-red-600 dark:text-red-400 text-wrap px-4">
-                  NOTE: Ratings update every 20 minutes. Data is stale
-                </p>
                 <div className="space-y-3 px-4">
                   <h3 className="text-sm font-semibold text-gray-900 dark:text-white">Ratings</h3>
                   
@@ -389,9 +386,6 @@ const Dashboard = () => {
 
         {/* Main Content - Recent Games */}
         <div className="flex-1 lg:ml-0 p-3 sm:p-4 w-full min-w-0">
-          <p className="text-center text-red-600 dark:text-red-400 text-wrap px-4 py-2 font-bold text-lg">
-            NOTE: This page only shows the current month games and not the saved games.
-          </p>
           <div className="max-w-4xl mx-auto">
             <div className="flex flex-col sm:flex-row sm:items-center justify-between mb-4 gap-2">
               <h2 className="text-lg sm:text-xl font-bold text-gray-900 dark:text-white">Recent Games</h2>

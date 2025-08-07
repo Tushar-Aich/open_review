@@ -100,10 +100,32 @@ const ChessAnalysis = () => {
     return colors[type] || colors.Unknown;
   };
 
-  const getEvaluationPercentage = (eval_score) => {
-    const score = parseFloat(eval_score)
+  const getEvaluationValue = (evalScore, gameResult) => {
+    // If evaluation exists, return it
+    if (evalScore !== null && evalScore !== undefined) {
+      return parseFloat(evalScore);
+    }
 
-    const transformedScore = Math.tanh(score / 4) * 5
+    // Handle null evaluations based on game result
+    if (!gameResult) return 0;
+
+    switch (gameResult) {
+      case '1-0': // White wins
+        return 10; // Large positive value for white advantage
+      case '0-1': // Black wins
+        return -10; // Large negative value for black advantage
+      case '1/2-1/2': // Draw/Stalemate
+      case '½-½': // Alternative draw notation
+        return 0;
+      default:
+        return 0;
+    }
+  };
+
+  const getEvaluationPercentage = (eval_score, gameResult) => {
+    const score = getEvaluationValue(eval_score, gameResult);
+
+    const transformedScore = Math.tanh(score / 4) * 5;
     const clampedEval = Math.max(-5, Math.min(5, transformedScore));
     return ((clampedEval + 5) / 10) * 100;
   };
@@ -111,6 +133,28 @@ const ChessAnalysis = () => {
   const getCurrentMove = () => {
     if (!gameData || currentMoveIndex < 0) return null;
     return gameData.data.moveComments[currentMoveIndex];
+  };
+
+  const getEvaluationDisplay = (evalScore, gameResult) => {
+    const value = getEvaluationValue(evalScore, gameResult);
+    
+    // If original eval was null, show result-based display
+    if (evalScore === null || evalScore === undefined) {
+      switch (gameResult) {
+        case '1-0':
+          return '1-0';
+        case '0-1':
+          return '0-1';
+        case '1/2-1/2':
+        case '½-½':
+          return '½-½';
+        default:
+          return '0.00';
+      }
+    }
+
+    // Otherwise show normal evaluation
+    return typeof evalScore === 'string' ? evalScore : (value > 0 ? '+' : '') + value.toFixed(2);
   };
 
   if (loading) {
@@ -204,7 +248,7 @@ const ChessAnalysis = () => {
                 <div className="flex items-center justify-between mb-2">
                   <span className="text-sm font-medium text-gray-700 dark:text-gray-300">Position Evaluation</span>
                   <span className="text-sm font-mono text-gray-600 dark:text-gray-400">
-                    {typeof evaluation === 'string' ? evaluation : (evaluation > 0 ? '+' : '') + evaluation.toFixed(2)}
+                    {getEvaluationDisplay(evaluation, gameData?.data?.result)}
                   </span>
                 </div>
                 <div className="w-full h-4 bg-gray-200 rounded-full overflow-hidden">
@@ -212,7 +256,7 @@ const ChessAnalysis = () => {
                     <div 
                       className="h-full bg-black"
                       style={{ 
-                        width: `${getEvaluationPercentage(evaluation)}%`,
+                        width: `${getEvaluationPercentage(evaluation, gameData?.data?.result)}%`,
                         backgroundImage: 'linear-gradient(45deg, rgba(0, 0, 0, 0.1) 25%, transparent 25%, transparent 50%, rgba(0, 0, 0, 0.1) 50%, rgba(0, 0, 0, 0.1) 75%, transparent 75%, transparent)',
                         backgroundSize: '1rem 1rem',
                         transition: 'width 0.5s ease-in-out'
@@ -325,15 +369,13 @@ const ChessAnalysis = () => {
                     <div>
                       <span className="text-gray-600 dark:text-gray-400">Evaluation: </span>
                       <span className="font-mono font-medium text-gray-900 dark:text-white">
-                        {currentMove.eval > 0 ? '+' : ''}{currentMove.eval.toFixed(2)}
+                        {evaluation === null ? 0.00 : (typeof evaluation === 'string' ? evaluation : (evaluation > 0 ? '+' : '') + evaluation.toFixed(2))}
                       </span>
                     </div>
                     <div>
-                      <span className="text-gray-600 dark:text-gray-400">Change: </span>
-                      <span className={`font-mono font-medium ${
-                        currentMove.evalDiff > 0 ? 'text-green-600 dark:text-green-400' : 'text-red-600 dark:text-red-400'
-                      }`}>
-                        {currentMove.evalDiff > 0 ? '+' : ''}{currentMove.evalDiff.toFixed(2)}
+                      <span className="text-gray-600 dark:text-gray-400">Evaluation: </span>
+                      <span className="font-mono font-medium text-gray-900 dark:text-white">
+                        {getEvaluationDisplay(evaluation, gameData?.data?.result)}
                       </span>
                     </div>
                   </div>

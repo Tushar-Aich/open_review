@@ -3,13 +3,7 @@ import axios from 'axios';
 
 const delay = (ms) => new Promise(res => setTimeout(res, ms));
 
-export const updateAllUserStats = async () => {
-  const users = await User.find({}, 'username');
-  console.log(`Updating stats for ${users.length} users`);
-
-  for (let i = 0; i < users.length; i++) {
-    const username = users[i].username;
-
+export const updateAllUserStats = async (username) => {
     try {
       const { data } = await axios.get(
         `https://api.chess.com/pub/player/${username}/stats`,
@@ -50,5 +44,4 @@ export const updateAllUserStats = async () => {
     }
 
     await delay(2000); // wait 2 seconds to avoid rate limit
-  }
 };

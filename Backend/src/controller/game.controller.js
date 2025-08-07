@@ -91,13 +91,27 @@ async function analyzeWithStockfish (fen) {
                         const move = moveMatch[1]
                         const rank = parseInt(multipvMatch[1], 10)
 
-                        const moveEval = scoreType === 'cp' ? scoreValue / 100 : (scoreValue > 0 ? `M${scoreValue}` : `-M${Math.abs(scoreValue)}`)
+                        // Convert mate scores to numerical values for calculations
+                        let moveEval;
+                        if (scoreType === 'cp') {
+                            moveEval = scoreValue / 100; // Convert centipawns to pawns
+                        } else {
+                            // For mate scores, use very high/low values to represent advantage
+                            // Positive mate = advantage for current side, negative = disadvantage
+                            moveEval = scoreValue > 0 ? 50 - scoreValue : -50 - scoreValue;
+                        }
 
                         if (rank === 1) {
                             evaluation = moveEval
                         }
                         
-                        topMoves.push({ move, eval: moveEval, rank });
+                        // Store both numerical value and display format
+                        topMoves.push({ 
+                            move, 
+                            eval: moveEval, 
+                            displayEval: scoreType === 'cp' ? moveEval : (scoreValue > 0 ? `M${scoreValue}` : `M${Math.abs(scoreValue)}`),
+                            rank 
+                        });
                     }
                 }
                 if(line.startsWith('bestmove')) {
@@ -199,7 +213,7 @@ const analyzeGame = asyncHandler(async (req, res) => {
             moveNumber: Math.ceil((i + 1) / 2), 
             move: move.san,
             fen: chess.fen(),
-            eval: evalAfter,
+            eval: typeof evalAfter === 'string' ? evalAfter : evalAfter,
             evalDiff: delta,
             type: label, 
             comment: ""
