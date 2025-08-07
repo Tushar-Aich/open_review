@@ -38,7 +38,6 @@ export const updateAllUserStats = async (username) => {
 
       await User.updateOne({ username }, { $set: updatedStats });
 
-      console.log(`[${i + 1}/${users.length}] Updated: ${username}`);
     } catch (err) {
       console.error(`❌ Error for ${username}: ${err.message}`);
     }
