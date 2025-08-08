@@ -14,7 +14,7 @@ const Hero = () => {
         }} />
       </div>
 
-      <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+      <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center flex flex-col justify-center items-center mt-32 md:mt-0">
         {/* Logo and Brand */}
         <div className="mb-8 animate-fadeInUp">
           <div className="inline-flex items-center justify-center w-24 h-24 rounded-2xl mb-6 bg-amber-600 dark:bg-amber-500 shadow-2xl animate-scaleIn animate-delay-200">

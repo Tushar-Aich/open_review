@@ -91,16 +91,18 @@ const SignIn = () => {
             {loading ? (
               <button
                 type="submit"
-                className="w-full py-3 px-4 rounded-lg font-semibold text-white bg-amber-600 hover:bg-amber-700 focus:ring-4 focus:ring-amber-500/50 transition-all duration-200 transform hover:scale-[1.02] animate-fadeInUp animate-delay-700"
+                className="w-full py-3 px-4 rounded-lg text-white bg-amber-600 hover:bg-amber-700 focus:ring-4 focus:ring-amber-500/50 transition-all duration-200 transform hover:scale-[1.02] animate-fadeInUp animate-delay-700 flex justify-center items-center"
                 disabled
               >
-                Sign In
-                <Loader2 size={18} className='animate-spin'/>
+                <div className='flex items-center justify-between w-36'>
+                  <div className="w-8 h-8 border-4 border-white border-t-transparent rounded-full animate-spin"></div>
+                  <h1 className='font-bold text-xl'>Signing In</h1>
+                </div>
               </button>
             ) : (
               <button
                 type="submit"
-                className="w-full py-3 px-4 rounded-lg font-semibold text-white bg-amber-600 hover:bg-amber-700 focus:ring-4 focus:ring-amber-500/50 transition-all duration-200 transform hover:scale-[1.02] animate-fadeInUp animate-delay-700"
+                className="w-full py-3 px-4 rounded-lg text-white bg-amber-600 hover:bg-amber-700 focus:ring-4 focus:ring-amber-500/50 transition-all duration-200 transform hover:scale-[1.02] animate-fadeInUp animate-delay-700 font-bold text-xl"
               >
                 Sign In
               </button>
